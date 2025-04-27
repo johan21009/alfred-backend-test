@@ -35,8 +35,8 @@ class Driver(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
+    phone = models.CharField(max_length=30)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='available')
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
     current_location = gis_models.PointField(geography=True, blank=True, null=True)
     rating = models.FloatField(
@@ -66,10 +66,10 @@ class Service(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer_name = models.CharField(max_length=255)
-    customer_phone = models.CharField(max_length=20)
+    customer_phone = models.CharField(max_length=30)
     pickup_address = models.ForeignKey(Address, related_name='pickup_services', on_delete=models.SET_NULL, null=True)
     driver = models.ForeignKey(Driver, related_name='services', on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='requested')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='requested')
     estimated_arrival = models.DurationField(null=True, blank=True)
     requested_at = models.DateTimeField(auto_now_add=True)
     assigned_at = models.DateTimeField(null=True, blank=True)

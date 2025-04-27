@@ -4,8 +4,8 @@ from faker import Faker
 import random
 from services.models import Address, Driver
 
-fake = Faker()
-
+fake = Faker('es_CO')
+Faker.seed(46)
 class Command(BaseCommand):
     help = 'Generates test data for addresses and drivers'
 
@@ -17,15 +17,15 @@ class Command(BaseCommand):
         
         # Create addresses
         for _ in range(count):
-            lat = random.uniform(-90, 90)
-            lng = random.uniform(-180, 180)
+            lat = random.uniform(4.5, 4.6)
+            lng = random.uniform(-74.1, -74.2)
             
             address = Address.objects.create(
                 street=fake.street_address(),
                 city=fake.city(),
-                state=fake.state(),
-                zip_code=fake.zipcode(),
-                country=fake.country(),
+                state=fake.department(),
+                zip_code=fake.postcode(),
+                country='Colombia',
                 location=Point(lng, lat)
             )
         
