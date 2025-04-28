@@ -5,7 +5,6 @@ import random
 from services.models import Address, Driver
 
 fake = Faker('es_CO')
-Faker.seed(46)
 class Command(BaseCommand):
     help = 'Generates test data for addresses and drivers'
 
