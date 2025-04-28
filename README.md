@@ -37,11 +37,15 @@ API construida con Django REST Framework para gestión de conductores, direccion
      ```bash
      docker-compose exec web python manage.py migrate
      ```
-4. Generar datos de prueba (20 registros):
+4. Realizar pruebas unitarias:
+     ```bash
+     docker-compose exec web python manage.py test
+     ```
+5. Generar datos de prueba (20 registros):
       ```bash
      docker-compose exec web python manage.py generate_test_data 20
      ```
-5. Crear usuario administrador:
+6. Crear usuario administrador:
       ```bash
      docker-compose exec web python manage.py createsuperuser
      ```
