@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Address, Driver, Service
 from .serializers import AddressSerializer, DriverSerializer, ServiceSerializer
+from .google_maps_time import GoogleMapsService
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from django.utils import timezone
@@ -24,14 +25,14 @@ class DriverViewSet(viewsets.ModelViewSet):
         driver = self.get_object()
         driver.status = 'available'
         driver.save()
-        return Response({'status': 'driver set to available'})
+        return Response({'status': 'Conductor marcado como disponible'})
 
     @action(detail=True, methods=['post'])
     def set_offline(self, request, pk=None):
         driver = self.get_object()
         driver.status = 'offline'
         driver.save()
-        return Response({'status': 'driver set to offline'})
+        return Response({'status': 'Conductor marcado como fuera de servicio'})
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
@@ -47,14 +48,14 @@ class ServiceViewSet(viewsets.ModelViewSet):
             pickup_address = Address.objects.get(id=pickup_address_id)
         except Address.DoesNotExist:
             return Response(
-                {"detail": "Invalid pickup address ID"},
+                {"detail": "ID de direccion de recogida no existe"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
         
         if not pickup_address.location:
             return Response(
-                {"detail": "Pickup address must have location coordinates"},
+                {"detail": "Direccion de recogida debe tener coordenadas de localizacion"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -68,17 +69,25 @@ class ServiceViewSet(viewsets.ModelViewSet):
         
         if not available_drivers.exists():
             return Response(
-                {"detail": "No available drivers nearby"},
+                {"detail": "No hay conductores disponibles cercanos"},
                 status=status.HTTP_404_NOT_FOUND
             )
         
         # Assign the closest driver
         closest_driver = available_drivers.first()
         
-        # Simple estimation: 2 minutes per km
-        #distance_km = available_drivers.first().distance.km
-        distance_km = closest_driver.distance.km
-        estimated_time = datetime.timedelta(minutes=math.ceil(distance_km * 2))
+        # Calculate estimated time of arrival (ETA) using Google Maps API
+        distance_time = GoogleMapsService.get_eta_with_traffic(
+            origin=f"{pickup_address.location.y},{pickup_address.location.x}",
+            destination=f"{closest_driver.current_location.y},{closest_driver.current_location.x}"
+                                                       
+        )
+        if distance_time != None:
+            estimated_time = datetime.timedelta(seconds=distance_time)
+        else:
+            # Simple estimation: 2 minutes per km
+            distance_km = closest_driver.distance.km
+            estimated_time = datetime.timedelta(minutes=math.ceil(distance_km * 2))
         
         service = Service.objects.create(
             customer_name=request.data.get('customer_name'),
