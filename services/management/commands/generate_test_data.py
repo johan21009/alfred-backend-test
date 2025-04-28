@@ -32,12 +32,12 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Successfully created {count} addresses'))
         
         # Create drivers
-        addresses = list(Address.objects.all())
+        #addresses = list(Address.objects.all())
         
         for _ in range(count):
-            address = random.choice(addresses)
-            lat = address.location.y + random.uniform(-0.1, 0.1)
-            lng = address.location.x + random.uniform(-0.1, 0.1)
+            #address = random.choice(addresses)
+            lat = random.uniform(4.5, 4.6)
+            lng = random.uniform(-74.1, -74.2)
             
             driver = Driver.objects.create(
                 first_name=fake.first_name(),
@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 email=fake.email(),
                 phone=fake.phone_number(),
                 status=random.choice(['available', 'available', 'available', 'offline']),
-                address=address,
+                address=None,
                 current_location=Point(lng, lat),
                 rating=round(random.uniform(3.0, 5.0), 1)
             )

@@ -10,21 +10,21 @@ class ServiceTestCase(TestCase):
         
         # Create test addresses
         self.address1 = Address.objects.create(
-            street="123 Main St",
-            city="Springfield",
-            state="IL",
+            street="Cra. 14 #86A-15",
+            city="Bogota",
+            state="Bogota",
             zip_code="12345",
-            country="USA",
-            location=Point(-87.6298, 41.8781)  # Chicago
+            country="Colombia",
+            location=Point(-74.0543174, 4.6708225)  
         )
         
         self.address2 = Address.objects.create(
-            street="456 Oak Ave",
-            city="Springfield",
-            state="IL",
+            street="Cra. 12 #86A-15",
+            city="Bogota",
+            state="Bogota",
             zip_code="12345",
-            country="USA",
-            location=Point(-87.6298, 41.8781)  # Same as address1 for simplicity
+            country="Colombia",
+            location=Point(-74.0543174, 4.6908225) 
         )
         
         # Create test drivers
@@ -34,8 +34,8 @@ class ServiceTestCase(TestCase):
             email="john@example.com",
             phone="1234567890",
             status="available",
-            address=self.address1,
-            current_location=Point(-87.6298, 41.8781)  # Same as address1
+            address=None,
+            current_location=Point(-74.0743174, 4.6408225)  
         )
         
         self.driver2 = Driver.objects.create(
@@ -44,8 +44,8 @@ class ServiceTestCase(TestCase):
             email="jane@example.com",
             phone="0987654321",
             status="available",
-            address=self.address2,
-            current_location=Point(-87.6298, 41.8781)  # Same as address2
+            address=None,
+            current_location=Point(-74.0643174, 4.6308225)  
         )
 
     def test_service_creation_with_driver_assignment(self):
