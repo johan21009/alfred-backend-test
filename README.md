@@ -12,7 +12,8 @@ API construida con Django REST Framework para gestión de conductores, direccion
   - Servicios
 
 -  Asignación automática del conductor disponible más cercano
--  Gestión de estados:
+  
+- Gestión de estados:
   - Estados de servicio (pendiente, en curso, completado)
   - Disponibilidad de conductores (online/offline)
 
