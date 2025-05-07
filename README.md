@@ -1,4 +1,4 @@
-# Alfred Backend Test - API para asignacion de servicios de domicilio
+# API para asignacion de servicios de domicilio
 
 ![Badge](https://img.shields.io/badge/Django-REST%20Framework-green) ![Badge](https://img.shields.io/badge/PostgreSQL-Database-blue) ![Badge](https://img.shields.io/badge/Docker-Containerization-2496ED)
 
